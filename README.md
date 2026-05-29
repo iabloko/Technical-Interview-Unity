@@ -9,7 +9,6 @@
 - [Управляемая и неуправляемая память](01-csharp/managed-unmanaged-memory.md)
 - [Стек и куча](01-csharp/stack-heap.md)
 - [Boxing / Unboxing](01-csharp/boxing-unboxing.md)
-- [Глоссарий](01-csharp/glossary.md)
 
 ### 02. Архитектура и паттерны
 - [SOLID](02-architecture/solid.md)
@@ -25,5 +24,3 @@
 - [Освещение: URP vs Built-in](04-rendering/lighting.md)
 
 ---
-
-> База пополняется по мере добавления тем.
