@@ -11,18 +11,18 @@
 - [Boxing / Unboxing](01-csharp/boxing-unboxing.md)
 - [Глоссарий](01-csharp/glossary.md)
 
-### 02. Ядро Unity
-- [Жизненный цикл MonoBehaviour](02-unity-core/lifecycle.md)
-- [Unity Garbage Collector](02-unity-core/unity-gc.md)
+### 02. Архитектура и паттерны
+- [SOLID](02-architecture/solid.md)
+- [Лучшие практики (DRY / KISS)](02-architecture/best-practices.md)
+- [Связанность (coupling / decoupling)](02-architecture/coupling-decoupling.md)
 
-### Рендеринг
-- [URP — Universal Render Pipeline](rendering/urp-render-pipeline.md)
-- [Освещение: URP vs Built-in](rendering/lighting.md)
+### 03. Ядро Unity
+- [Жизненный цикл MonoBehaviour](03-unity-core/lifecycle.md)
+- [Unity Garbage Collector](03-unity-core/unity-gc.md)
 
-### 04. Архитектура и паттерны
-- [SOLID](04-architecture/solid.md)
-- [Лучшие практики (DRY / KISS)](04-architecture/best-practices.md)
-- [Связанность (coupling / decoupling)](04-architecture/coupling-decoupling.md)
+### 04. Рендеринг
+- [URP — Universal Render Pipeline](04-rendering/urp-render-pipeline.md)
+- [Освещение: URP vs Built-in](04-rendering/lighting.md)
 
 ---
 
