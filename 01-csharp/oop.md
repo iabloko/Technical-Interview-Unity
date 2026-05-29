@@ -72,20 +72,6 @@ float Total(IEnumerable<Shape> shapes) => shapes.Sum(s => s.Area());
 
 ---
 
-## abstract class vs interface
-
-| | `abstract class` | `interface` |
-|---|---|---|
-| Множественное наследование | Нет | Да |
-| Реализация методов | Может содержать | Только default-методы (C# 8+) |
-| Поля | Да | Нет (только свойства/константы) |
-| Конструктор | Да | Нет |
-| Когда использовать | Общая база + общее состояние/код | Контракт «что умеет делать», несвязанные типы |
-
-> Правило: **«is a»** → наследование/абстрактный класс; **«can do»** → интерфейс.
-
----
-
 ## virtual / override / new / sealed
 
 ```csharp
@@ -96,12 +82,12 @@ public class Base
 
 public class Derived : Base
 {
-    public override void Speak() => Debug.Log("Derived");  // полиморфизм
+    public override void Speak() => Debug.Log("Derived");
 }
 
 public class Shadow : Base
 {
-    public new void Speak() => Debug.Log("Shadow");        // скрытие, НЕ полиморфизм
+    public new void Speak() => Debug.Log("Shadow");
 }
 ```
 
@@ -138,21 +124,3 @@ public class Enemy : MonoBehaviour
 > Принцип: **«Предпочитай композицию наследованию»** (из «Banda четырёх»).
 
 ---
-
-## Частые вопросы на собеседовании
-
-1. **Назови 4 столпа ООП и приведи пример каждого.**
-2. **Чем `abstract class` отличается от `interface`? Когда что выбрать?**
-3. **В чём разница между `override` и `new`?** (скрытие vs переопределение, по объекту vs по ссылке)
-4. **Что такое полиморфизм? Статический и динамический.**
-5. **Почему в Unity предпочитают композицию наследованию?**
-6. **Можно ли в C# множественное наследование?** (классов — нет, интерфейсов — да)
-7. **Что такое `sealed` и зачем он нужен?** (запрет наследования + микро-оптимизация вызовов)
-8. **Разница между перегрузкой (overload) и переопределением (override)?**
-
----
-
-## См. также
-- [SOLID](../04-architecture/solid.md)
-- [Паттерны проектирования](../04-architecture/patterns.md)
-- [GameObject и компоненты](../02-unity-core/gameobject-component.md)

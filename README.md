@@ -9,7 +9,12 @@
 - [Коллекции](01-csharp/collections.md)
 - [Делегаты и события](01-csharp/delegates-events.md)
 - [async / await](01-csharp/async-await.md)
+- [Управляемая и неуправляемая память](01-csharp/managed-unmanaged-memory.md)
+- [Стек и куча](01-csharp/stack-heap.md)
+- [Boxing / Unboxing](01-csharp/boxing-unboxing.md)
+- [Unity Garbage Collector](Unity/unity-gc.md)
 - [Память и GC](01-csharp/memory-gc.md)
+- [Глоссарий](01-csharp/glossary.md)
 
 ### 02. Ядро Unity
 - [Жизненный цикл MonoBehaviour](02-unity-core/lifecycle.md)
@@ -29,6 +34,7 @@
 - [Паттерны](04-architecture/patterns.md)
 - [Dependency Injection](04-architecture/di.md)
 - [SOLID](04-architecture/solid.md)
+- [Лучшие практики (DRY / KISS)](04-architecture/best-practices.md)
 
 ### 05. Производительность
 - [Профилирование](05-performance/profiling.md)
