@@ -14,6 +14,7 @@
 - [SOLID](02-architecture/solid.md)
 - [Лучшие практики (DRY / KISS)](02-architecture/best-practices.md)
 - [Связанность (coupling / decoupling)](02-architecture/coupling-decoupling.md)
+- [Dependency Injection (Zenject)](02-architecture/di.md)
 
 ### 03. Ядро Unity
 - [Жизненный цикл MonoBehaviour](03-unity-core/lifecycle.md)

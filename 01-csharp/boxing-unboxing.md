@@ -26,6 +26,14 @@ int back = (int)boxed; // unboxing: копирование обратно + пр
 
 - передавать `struct` через дженерик-параметр или `in`, а не через `object`;
 - осторожно с интерфейсами на `struct` — вызов через интерфейс боксит экземпляр;
+
+  > **Исключение — generic-ограничение.** Если метод параметризован `where T : IInterface`, то вызов `value.Method()` **не боксит**: компилятор знает конкретный тип `T` на этапе JIT и вызывает метод напрямую (девиртуализация через constrained-вызов IL). Бокс возникает только когда struct приводится к **самому типу интерфейса** (`IInterface x = myStruct;`).
+  >
+  > ```csharp
+  > void Call<T>(T x) where T : IComparable<T> => x.CompareTo(x); // T = int → без бокса
+  > void Call(IComparable x)                    => x.CompareTo(x); // int боксится в IComparable
+  > ```
+  > Частый уточняющий вопрос на собесе: почему `List<int>.Sort()` и `EqualityComparer<T>.Default` не мусорят на value-типах — именно из-за дженерик-ограничений.
 - для строк — `StringBuilder` либо обновлять текст только при изменении.
 
 ---
