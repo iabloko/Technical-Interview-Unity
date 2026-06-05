@@ -19,6 +19,7 @@
 ### 03. Ядро Unity
 - [Жизненный цикл MonoBehaviour](03-unity-core/lifecycle.md)
 - [Unity Garbage Collector](03-unity-core/unity-gc.md)
+- [Загрузка ассетов: Resources / AssetBundles / Addressables](03-unity-core/asset-management.md)
 
 ### 04. Рендеринг
 - [Графический конвейер (этапы построения изображения)](04-rendering/graphics-pipeline.md)

@@ -35,4 +35,5 @@ void WorkerThread()                  // фоновый поток
     finally { _mutex.ReleaseMutex(); } // обязательно освобождаем
 }
 ```
+
 ---

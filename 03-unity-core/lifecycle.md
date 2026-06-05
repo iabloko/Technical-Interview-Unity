@@ -77,4 +77,5 @@ public class Mover : MonoBehaviour
 5. **Сколько раз вызывается `OnEnable`/`OnDisable` против `Awake`/`OnDestroy`?**
 6. **Гарантирован ли порядок `Awake` между разными объектами?** (нет; Script Execution Order)
 7. **Почему в `Update` используют `Time.deltaTime`?** (кадр плавающей длительности)
+
 ---

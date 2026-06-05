@@ -128,3 +128,5 @@ public class Game
     public Game(ISaveSystem save) => _save = save;  // подменяемо, тестируемо
 }
 ```
+
+---
