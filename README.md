@@ -21,7 +21,11 @@
 - [Unity Garbage Collector](03-unity-core/unity-gc.md)
 
 ### 04. Рендеринг
+- [Графический конвейер (этапы построения изображения)](04-rendering/graphics-pipeline.md)
 - [URP — Universal Render Pipeline](04-rendering/urp-render-pipeline.md)
 - [Освещение: URP vs Built-in](04-rendering/lighting.md)
+
+### 05. Асинхронность
+- [Task / IEnumerator / UniTask](05-async/async.md)
 
 ---
