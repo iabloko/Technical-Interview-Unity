@@ -20,6 +20,9 @@
 - [Жизненный цикл MonoBehaviour](03-unity-core/lifecycle.md)
 - [Unity Garbage Collector](03-unity-core/unity-gc.md)
 - [Загрузка ассетов: Resources / AssetBundles / Addressables](03-unity-core/asset-management.md)
+- [Profiler](03-unity-core/profiler.md)
+- [Frame Debugger](03-unity-core/frame-debugger.md)
+- [Memory Profiler](03-unity-core/memory-profiler.md)
 
 ### 04. Рендеринг
 - [Графический конвейер (этапы построения изображения)](04-rendering/graphics-pipeline.md)

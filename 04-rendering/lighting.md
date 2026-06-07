@@ -143,12 +143,12 @@ half4 frag (Varyings i) : SV_Target
 
 ## Ключевые отличия (для собеседования)
 
-| | Built-in Forward | URP Forward |
-|---|---|---|
-| Доп. per-pixel источник | **отдельный проход** на объект | в **одном проходе**, но с лимитом |
-| Настройка лимита света | Pixel Light Count (Quality) | URP Asset (Per Pixel/Vertex, max) |
-| Много динамического света | дорого (или Deferred) | **Forward+** (clustered) |
-| Где настраивается | Quality / Graphics Settings | URP Asset + Renderer |
+|                           | Built-in Forward               | URP Forward                       |
+|---------------------------|--------------------------------|-----------------------------------|
+| Доп. per-pixel источник   | **отдельный проход** на объект | в **одном проходе**, но с лимитом |
+| Настройка лимита света    | Pixel Light Count (Quality)    | URP Asset (Per Pixel/Vertex, max) |
+| Много динамического света | дорого (или Deferred)          | **Forward+** (clustered)          |
+| Где настраивается         | Quality / Graphics Settings    | URP Asset + Renderer              |
 
 > Запекание (lightmaps, probes) и типы источников — **общие**. Различается именно способ применения реалтайм-света при отрисовке.
 
