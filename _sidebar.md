@@ -11,12 +11,18 @@
   - [Равенство: Equals / GetHashCode](/01-csharp/equality.md)
   - [Обобщения: constraints, вариантность](/01-csharp/generics.md)
   - [Современный C#: record, pattern matching](/01-csharp/modern-csharp.md)
+  - [Строки: StringBuilder, interning](/01-csharp/strings.md)
+  - [Исключения: механизм и стоимость](/01-csharp/exceptions.md)
+  - [Nullable reference types](/01-csharp/nullable-reference-types.md)
+  - [Атрибуты и рефлексия](/01-csharp/attributes-reflection.md)
 
 - **02. Архитектура и паттерны**
   - [SOLID](/02-architecture/solid.md)
   - [Лучшие практики (DRY / KISS)](/02-architecture/best-practices.md)
   - [Связанность (coupling / decoupling)](/02-architecture/coupling-decoupling.md)
   - [Dependency Injection (Zenject)](/02-architecture/di.md)
+  - [VContainer (vs Zenject)](/02-architecture/di-vcontainer.md)
+  - [Clean Architecture: слои](/02-architecture/clean-architecture.md)
 
 - **03. Ядро Unity**
   - [Жизненный цикл MonoBehaviour](/03-unity-core/lifecycle.md)
@@ -32,6 +38,8 @@
   - [Assembly Definitions](/03-unity-core/assembly-definitions.md)
   - [Object Pooling](/03-unity-core/object-pooling.md)
   - [Префабы: variants и nested](/03-unity-core/prefabs.md)
+  - [Addressables: подробно](/03-unity-core/addressables.md)
+  - [Конвенции и best practices](/03-unity-core/conventions.md)
 
 - **04. Рендеринг**
   - [Графический конвейер (этапы построения изображения)](/04-rendering/graphics-pipeline.md)
@@ -45,6 +53,7 @@
   - [Батчинг, SRP Batcher, GPU Instancing](/06-performance/batching.md)
   - [Мобильная оптимизация](/06-performance/mobile-optimization.md)
   - [Методология профилирования](/06-performance/profiling-methodology.md)
+  - [Производительность UI (uGUI)](/06-performance/ui-performance.md)
 
 - **07. DOTS**
   - [ECS](/07-dots/ecs.md)
@@ -54,9 +63,16 @@
   - [Паттерны проектирования](/08-patterns/design-patterns.md)
   - [Конечный автомат (FSM)](/08-patterns/fsm.md)
   - [MVC / MVP / MVVM](/08-patterns/mvp-mvvm.md)
+  - [Orchestrator](/08-patterns/orchestrator.md)
+  - [Chain of Responsibility](/08-patterns/chain-of-responsibility.md)
 
 - **09. Тестирование**
   - [Unity Test Framework](/09-testing/testing.md)
 
 - **10. Математика**
   - [Векторы, кватернионы, матрицы](/10-math/math.md)
+
+- **11. Инструменты и библиотеки**
+  - [DOTween](/11-tools/dotween.md)
+  - [UniRx / R3](/11-tools/unirx.md)
+  - [Editor scripting](/11-tools/editor-scripting.md)
