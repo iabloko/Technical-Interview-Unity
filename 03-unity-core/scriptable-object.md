@@ -1,4 +1,4 @@
-х[← К содержанию](../README.md)
+[← К содержанию](../README.md)
 
 # ScriptableObject
 
