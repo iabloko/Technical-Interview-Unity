@@ -19,6 +19,7 @@
 - [Современный C#: record, pattern matching, switch expressions](01-csharp/modern-csharp.md)
 - [Строки: immutability, StringBuilder, interning](01-csharp/strings.md)
 - [Исключения: механизм и стоимость](01-csharp/exceptions.md)
+- [IDisposable, using, освобождение ресурсов](01-csharp/idisposable.md)
 - [Nullable reference types](01-csharp/nullable-reference-types.md)
 - [Атрибуты и рефлексия](01-csharp/attributes-reflection.md)
 
@@ -46,14 +47,20 @@
 - [Префабы: variants и nested](03-unity-core/prefabs.md)
 - [Addressables: подробно](03-unity-core/addressables.md)
 - [Конвенции C# / Unity и best practices MonoBehaviour](03-unity-core/conventions.md)
+- [Система анимации: Animator, Blend Trees, Playables, IK](03-unity-core/animation.md)
+- [Input System (новый) vs legacy Input](03-unity-core/input-system.md)
+- [Время и тайминг кадра](03-unity-core/time.md)
+- [Сохранения и сериализация данных](03-unity-core/save-systems.md)
 
 ### 04. Рендеринг
 - [Графический конвейер (этапы построения изображения)](04-rendering/graphics-pipeline.md)
 - [URP — Universal Render Pipeline](04-rendering/urp-render-pipeline.md)
 - [Освещение: URP vs Built-in](04-rendering/lighting.md)
+- [Кастомный рендеринг в URP: Renderer Features, compute shaders](04-rendering/urp-custom-rendering.md)
 
 ### 05. Асинхронность
 - [Task / IEnumerator / UniTask](05-async/async.md)
+- [Async/await: внутреннее устройство](05-async/async-internals.md)
 
 ### 06. Производительность
 - [Батчинг draw call'ов: Static/Dynamic, SRP Batcher, GPU Instancing](06-performance/batching.md)
