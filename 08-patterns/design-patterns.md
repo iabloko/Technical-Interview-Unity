@@ -28,7 +28,7 @@
 
 | Паттерн | Задача | В Unity |
 |---|---|---|
-| **Observer** | подписка на изменения без знания о подписчиках | C# [события](../01-csharp/delegates-events.md), [UniRx](../05-async/async.md), SO-event channels |
+| **Observer** | подписка на изменения без знания о подписчиках | C# [события](../01-csharp/delegates-events.md), [UniRx](../11-tools/unirx.md), SO-event channels |
 | **Command** | действие как объект (отмена, очередь, реплей) | input, undo-redo, очередь ходов |
 | **State** | поведение зависит от состояния | см. [FSM](fsm.md) |
 | **Strategy** | взаимозаменяемые алгоритмы | разные AI/движение через интерфейс |

@@ -33,7 +33,7 @@
 
 Один вызов отрисовывает много экземпляров одного меша+материала, различающихся параметрами per-instance (матрица, цвет через `MaterialPropertyBlock`). Идеально для травы, толпы, пуль. Включается галочкой в материале (`Enable GPU Instancing`).
 
-d**SRP Batcher и instancing не складываются:** для обычных рендереров SRP Batcher имеет приоритет, поэтому instancing на материале сам по себе не сработает поверх него. Где instancing реально нужен — это процедурная отрисовка через `Graphics.DrawMeshInstanced` / `DrawMeshInstancedIndirect` (объекты без `GameObject`).
+**SRP Batcher и instancing не складываются:** для обычных рендереров SRP Batcher имеет приоритет, поэтому instancing на материале сам по себе не сработает поверх него. Где instancing реально нужен — это процедурная отрисовка через `Graphics.DrawMeshInstanced` / `DrawMeshInstancedIndirect` (объекты без `GameObject`).
 
 ## Что ломает батчинг
 

@@ -45,7 +45,7 @@ Presenter — обычный C#-класс без `MonoBehaviour` → юнит-�
 
 - **ViewModel** выставляет состояние через **наблюдаемые свойства**; View **связывается** (data binding) с ними и обновляется автоматически.
 - View декларативно подписана на ViewModel; ручного `view.SetX()` нет.
-- В Unity нет встроенного binding для uGUI; реализуют через [UniRx](../05-async/async.md) (`ReactiveProperty`) или **UI Toolkit** (есть data binding). 
+- В Unity нет встроенного binding для uGUI; реализуют через [UniRx](../11-tools/unirx.md) (`ReactiveProperty`) или **UI Toolkit** (есть data binding). 
 
 ```csharp
 // ViewModel с UniRx
