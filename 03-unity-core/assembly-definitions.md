@@ -20,6 +20,7 @@
 | `Platforms` | include/exclude по платформам |
 | `Define Constraints` | компилировать только при заданных `#define` |
 | `Allow unsafe code` | разрешить `unsafe` |
+| `No Engine References` | не ссылаться на сборки UnityEngine/UnityEditor — для слоя на чистом C# (см. [Clean Architecture](../02-architecture/clean-architecture.md)) |
 | `Version Defines` | `#define` в зависимости от версии пакета |
 
 ## asmref

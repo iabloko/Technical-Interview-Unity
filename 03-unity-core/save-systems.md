@@ -93,7 +93,10 @@ public class SaveData
 ```csharp
 var path = Path.Combine(Application.persistentDataPath, "save.json");
 File.WriteAllText(path + ".tmp", json);   // 1) пишем во временный файл
-File.Replace(path + ".tmp", path, path + ".bak"); // 2) атомарная подмена + бэкап предыдущего
+if (File.Exists(path))
+    File.Replace(path + ".tmp", path, path + ".bak"); // 2) атомарная подмена + бэкап предыдущего
+else
+    File.Move(path + ".tmp", path);       //    первое сохранение: File.Replace требует существующий целевой файл
 ```
 
 При загрузке: основной файл повреждён (исключение парсинга, проверка контрольной суммы) → откат на `.bak`.

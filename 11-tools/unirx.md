@@ -2,7 +2,7 @@
 
 # UniRx / R3 (реактивное программирование)
 
-UniRx — реализация Reactive Extensions (Rx) для Unity; **R3** — её современный преемник. Опциональная библиотека: применять, **только если проект уже от неё зависит** (проверить `manifest.json`); иначе предпочесть обычные [события](../01-csharp/delegates-events.md)/[UniTask](../05-async/async.md).
+UniRx — реализация Reactive Extensions (Rx) для Unity. Репозиторий UniRx архивирован в 2024 г.; автор рекомендует преемника — **R3** (Cysharp). Rx — дополнительная зависимость: для простых уведомлений достаточно [событий](../01-csharp/delegates-events.md)/[UniTask](../05-async/async.md) (см. «UniRx vs UniTask vs C# events» ниже).
 
 ## Идея
 

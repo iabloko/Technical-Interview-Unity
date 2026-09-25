@@ -125,7 +125,7 @@ public ValueTask<int> GetAsync()
 
 Исключение из `async`-метода **не вылетает наружу сразу** — builder помещает его в возвращаемый `Task`, и оно всплывает при `await` (или при обращении к `.Result`, обёрнутое в `AggregateException`).
 
-- `async void` исключение **некуда положить** — оно летит в `SynchronizationContext` как необработанное и роняет приложение. Отсюда правило «`async void` только для обработчиков событий», а в Unity — `UniTaskVoid` + `.Forget()` (см. [исключения](../01-csharp/exceptions.md), [async](async.md)).
+- У `async void` исключение **некуда положить** — builder публикует его в `SynchronizationContext` как необработанное: в Unity `UnitySynchronizationContext` его логирует, без контекста (пул потоков) оно завершает процесс. Вызывающий код перехватить его не может. Отсюда правило «`async void` только для обработчиков событий», а в Unity — `UniTaskVoid` + `.Forget()` (см. [исключения](../01-csharp/exceptions.md), [async](async.md)).
 - Отмена через `CancellationToken` бросает `OperationCanceledException` — это **штатный** поток, а не ошибка; Task переходит в состояние `Canceled`.
 
 ## Что спрашивают на собеседовании
@@ -137,6 +137,6 @@ public ValueTask<int> GetAsync()
 - Почему `task.Result` на главном потоке вешает приложение? (Continuation ждёт главный поток, а он заблокирован — дедлок.)
 - Что делает `ConfigureAwait(false)` и когда он опасен в Unity? (Не захватывает контекст; после него можно быть не в главном потоке.)
 - Чем `ValueTask` отличается от `Task` и когда он оправдан? (Struct, 0 аллокаций на синхронном пути; нельзя await дважды; для горячих путей.)
-- Куда попадает исключение из `async`-метода? (В возвращаемый Task, всплывает на `await`; из `async void` — роняет приложение.)
+- Куда попадает исключение из `async`-метода? (В возвращаемый Task, всплывает на `await`; из `async void` — в `SynchronizationContext`: в Unity логируется, без контекста завершает процесс.)
 
 ---

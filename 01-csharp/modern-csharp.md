@@ -2,7 +2,7 @@
 
 # Современный C#: record, pattern matching, switch expressions
 
-> Версия языка в Unity зависит от рантайма. Unity 2021+ (.NET Standard 2.1) поддерживает C# 9; часть возможностей C# 10+ доступна частично. Проверять под конкретную версию редактора.
+> Unity 2021.2 и новее (включая Unity 6) официально поддерживает C# 9; возможности C# 10+ (`record struct`, `global using` и др.) официально не поддерживаются. Для `record` и `init`-сеттеров нужен тип `System.Runtime.CompilerServices.IsExternalInit`, которого нет в BCL Unity: его объявляют в проекте вручную. Сериализатор Unity `record` не поддерживает. Точный список — в разделе Manual «C# compiler» для своей версии редактора.
 
 ## record
 
@@ -23,7 +23,7 @@ public record PlayerStats(int Health, int Mana);
 var s2 = stats with { Health = 100 };   // копия с одним изменённым полем
 ```
 
-`record struct` (C# 10) — значимый тип с тем же синтаксисом. Применять для иммутабельных DTO/конфигов; для часто меняющихся игровых данных каждого кадра — осторожно (создание копий через `with` аллоцирует для `record class`).
+`record struct` (C# 10) — значимый тип с тем же синтаксисом; в Unity недоступен (C# 9). `record` применять для иммутабельных DTO/конфигов; для часто меняющихся игровых данных каждого кадра — осторожно (`with` на `record class` аллоцирует копию).
 
 ## Pattern matching
 
@@ -45,6 +45,8 @@ string Grade(int x) => x switch
     _ => "C"
 };
 ```
+
+> **Ловушка Unity:** паттерны `is null` / `not null` проверяют ссылку и не вызывают перегруженный `==` у `UnityEngine.Object`. Уничтоженный объект (fake null, см. [equality](equality.md)) проходит проверку `not null`. Для Unity-объектов проверять через `==`/`!=` или неявное приведение к `bool` (`if (collider)`).
 
 ## switch expression
 

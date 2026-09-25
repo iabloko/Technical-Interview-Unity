@@ -83,7 +83,7 @@ _rebind = _action.PerformInteractiveRebinding()
 ## Senior-нюансы
 
 - **UI**: для uGUI нужен `InputSystemUIInputModule` вместо `StandaloneInputModule`; конфликт «прыжок и клик по UI» решают отдельной картой UI + проверкой `EventSystem.IsPointerOverGameObject` или приоритетом карт.
-- **Утечки подписок**: лямбда в `performed` без отписки держит объект; отписываться в `OnDestroy` симметрично подписке.
+- **Утечки подписок**: лямбда в `performed` без отписки держит объект; отписываться симметрично подписке (подписка в `OnEnable` — отписка в `OnDisable`, в `Awake` — в `OnDestroy`; см. [conventions](conventions.md)).
 - **Disambiguation у Value-действий**: два геймпада/контрола — значение берётся с активнейшего; для сырого мультитач/мультидевайс потока — Pass-Through.
 - **`InputSystem.onAnyButtonPress`** — «нажми любую кнопку», определение последнего активного устройства для подсказок UI.
 - **Device hot-swap**: `InputUser.onChange` / `PlayerInput.onControlsChanged` — геймпад отключился посреди игры → пауза и подсказка.

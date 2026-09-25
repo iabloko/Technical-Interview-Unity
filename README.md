@@ -22,6 +22,7 @@
 - [IDisposable, using, освобождение ресурсов](01-csharp/idisposable.md)
 - [Nullable reference types](01-csharp/nullable-reference-types.md)
 - [Атрибуты и рефлексия](01-csharp/attributes-reflection.md)
+- [Глоссарий (C#)](01-csharp/glossary.md)
 
 ### 02. Архитектура и паттерны
 - [SOLID](02-architecture/solid.md)

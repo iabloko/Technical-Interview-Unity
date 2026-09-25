@@ -54,10 +54,13 @@ public class OutlineFeature : ScriptableRendererFeature
 ```hlsl
 #pragma kernel CSMain
 RWStructuredBuffer<float3> _Positions;
+uint _Count;
+float _DeltaTime;
 
 [numthreads(64,1,1)]                      // размер группы: 64 потока
 void CSMain (uint3 id : SV_DispatchThreadID)
 {
+    if (id.x >= _Count) return;           // count не кратен 64 → последняя группа выходит за размер буфера
     _Positions[id.x] += float3(0, -9.8, 0) * _DeltaTime;
 }
 ```
@@ -65,6 +68,8 @@ void CSMain (uint3 id : SV_DispatchThreadID)
 ```csharp
 var buffer = new ComputeBuffer(count, sizeof(float) * 3);
 _shader.SetBuffer(_kernel, "_Positions", buffer);
+_shader.SetInt("_Count", count);
+_shader.SetFloat("_DeltaTime", Time.deltaTime);
 _shader.Dispatch(_kernel, Mathf.CeilToInt(count / 64f), 1, 1);  // число групп
 // ...
 buffer.Release();   // ComputeBuffer — нативный ресурс, освобождать обязательно

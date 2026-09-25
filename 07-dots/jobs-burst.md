@@ -35,7 +35,7 @@ handle.Complete();   // дождаться результата
 Job не может обращаться к управляемым объектам (классам, Unity API) — только к **blittable** данным в `NativeContainer`. Это и есть гарантия безопасности:
 
 - `NativeArray<T>` (и `NativeList`, `NativeHashMap`…) — неуправляемая память с проверкой доступа. Требуют ручного `Dispose` (иначе утечка; есть `Allocator.Temp/TempJob/Persistent`).
-- `T` обязан быть `unmanaged` (см. [generics](../01-csharp/generics.md)) — без ссылок.
+- `T` должен быть unmanaged-типом (без ссылочных полей): `NativeArray<T>` объявлен с `where T : struct` и проверяет это в рантайме, контейнеры пакета Collections (`NativeList<T>` и др.) — ограничением `where T : unmanaged` (см. [generics](../01-csharp/generics.md)).
 - Атрибуты `[ReadOnly]`/`[WriteOnly]` позволяют системе разрешать параллельный доступ; конфликтующая запись из двух job'ов отлавливается до запуска.
 
 ## Burst

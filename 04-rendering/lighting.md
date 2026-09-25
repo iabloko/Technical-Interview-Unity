@@ -95,7 +95,7 @@ fixed4 frag (v2f i) : SV_Target
   - **Main Light** — один directional, per-pixel;
   - **Additional Lights** — настраиваются как **Per Pixel / Per Vertex / Disabled**;
   - все источники объекта считаются в **одном проходе** (нет отдельного прохода на каждый свет, как в Built-in) → дешевле по draw call'ам;
-  - есть **лимит** доп. источников на объект (по умолчанию до 8, зависит от платформы и настроек Asset).
+  - есть **лимит** доп. источников на объект — Per Object Limit в URP Asset (по умолчанию 4, максимум 8).
 - **Forward+** (с Unity 2022.2):
   - свет отсекается **по тайлам экрана** (clustered), а не по объектам;
   - снимает лимит «N источников на объект» → много динамического света. См. [URP](urp-render-pipeline.md).
@@ -107,7 +107,7 @@ fixed4 frag (v2f i) : SV_Target
 Математика та же (`NdotL`, закон Ламберта на каждый пиксель), но **другой shader API** — библиотека URP `Lighting.hlsl` вместо `_LightColor0`/`ShadeSH9`. Дополнительные источники накапливаются в **цикле в одном проходе** (без отдельных additive-проходов, как в Built-in):
 
 ```hlsl
-// URP: фрагментный шейдер
+// URP Forward: фрагментный шейдер
 half4 frag (Varyings i) : SV_Target
 {
     half3 N = normalize(i.normalWS);
@@ -121,7 +121,7 @@ half4 frag (Varyings i) : SV_Target
     uint count = GetAdditionalLightsCount();
     for (uint li = 0; li < count; li++)
     {
-        Light l = GetAdditionalLight(li, i.positionWS);
+        Light l = GetAdditionalLight(li, i.positionWS, half4(1, 1, 1, 1)); // с shadowMask считаются тени; без него shadowAttenuation = 1
         half atten = l.distanceAttenuation * l.shadowAttenuation;     // затухание + тень
         color += albedo * l.color * saturate(dot(N, l.direction)) * atten;
     }
@@ -129,7 +129,7 @@ half4 frag (Varyings i) : SV_Target
 }
 ```
 
-> **Forward+** на уровне шейдера почти не отличается — тот же цикл `GetAdditionalLight`. Меняется лишь то, *как формируется список источников*: отсечение по тайлам/кластерам экрана, а не по объектам. Сам per-pixel расчёт на каждый источник идентичен.
+> **Forward+** требует другого цикла. Список источников формируется отсечением по кластерам экрана, и при кластерном обходе (`USE_FORWARD_PLUS`, в новых версиях URP — `USE_CLUSTER_LIGHT_LOOP`) `GetAdditionalLightsCount()` возвращает 0: цикл `for` выше не обработает ни одного дополнительного источника. Источники обходят макросами `LIGHT_LOOP_BEGIN(count)` / `LIGHT_LOOP_END`; им нужна локальная переменная `InputData inputData` с заполненными `positionWS` и `normalizedScreenSpaceUV` (по ним выбирается кластер). Дополнительные directional-источники обходят отдельным циклом до `URP_FP_DIRECTIONAL_LIGHTS_COUNT`. Расчёт вклада каждого источника (`NdotL`, затухание) тот же.
 
 ---
 
@@ -151,5 +151,14 @@ half4 frag (Varyings i) : SV_Target
 | Где настраивается         | Quality / Graphics Settings    | URP Asset + Renderer              |
 
 > Запекание (lightmaps, probes) и типы источников — **общие**. Различается именно способ применения реалтайм-света при отрисовке.
+
+## Что спрашивают на собеседовании
+
+- Realtime / Baked / Mixed: что считается в рантайме, что запекается.
+- Зачем Light Probes и Reflection Probes.
+- Per-pixel vs per-vertex освещение.
+- Чем Built-in Forward отличается от URP Forward в обработке дополнительных источников.
+- Когда нужен Forward+ или Deferred и что меняется в шейдере при Forward+.
+- Как устроены реалтайм-тени (shadow maps, каскады).
 
 ---

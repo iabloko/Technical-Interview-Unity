@@ -62,7 +62,7 @@ Model space ──(Model matrix)──► World space ──(View matrix)──�
 - **NDC (Normalized Device Coordinates)** — после **перспективного деления** (x, y, z делятся на компоненту `w`). Куб `[-1..1]` (в D3D z: `0..1`).
 - **Screen (window) space** — NDC растянут на размеры вьюпорта (пиксели экрана) → **viewport transform**.
 
-> Три матрицы Model × View × Projection часто перемножают в одну **MVP-матрицу** и применяют к вершине за один умножение в вершинном шейдере.
+> Три матрицы Model × View × Projection часто перемножают в одну **MVP-матрицу** и применяют к вершине за одно умножение в вершинном шейдере.
 
 ---
 

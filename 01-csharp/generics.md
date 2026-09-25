@@ -23,11 +23,12 @@
 | `where T : BaseClass` | наследник класса |
 | `where T : IInterface` | реализует интерфейс |
 | `where T : U` | T наследует/реализует другой параметр U |
-| `where T : unmanaged` | value-тип без ссылок (нужно для `NativeArray`, [Burst](../07-dots/jobs-burst.md)) |
+| `where T : unmanaged` | value-тип без ссылочных полей на любом уровне вложенности. Используется в контейнерах `Unity.Collections` (`NativeList<T>`, `NativeHashMap<K,V>`) и [Burst](../07-dots/jobs-burst.md)-коде; `NativeArray<T>` объявлен с `where T : struct` и проверяет отсутствие ссылок в рантайме |
 | `where T : notnull` | не допускает nullable |
 
 ```csharp
-public T Create<T>() where T : Component, new() => new T();
+public T Create<T>() where T : class, new() => new T();                   // обычный C#-класс
+public T Attach<T>(GameObject go) where T : Component => go.AddComponent<T>(); // компонент создаётся только через AddComponent
 ```
 
 Без ограничения с типом `T` можно делать минимум (как с `object`); ограничение открывает его API на этапе компиляции, без рефлексии и боксинга.

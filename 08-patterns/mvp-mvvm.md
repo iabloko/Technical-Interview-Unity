@@ -18,14 +18,14 @@
 
 ## MVP (часто выбирают в Unity)
 
-- **Presenter** — посредник: получает события от View, дёргает Model, обновляет View через её интерфейс.
-- View **пассивна** (Passive View): не содержит логики, реализует интерфейс (`IHealthView { void SetHealth(int) }`), Presenter работает с интерфейсом, не с конкретным виджетом.
+- **Presenter** — посредник: получает события от View, вызывает методы Model, обновляет View через её интерфейс.
+- View **пассивна** (Passive View): не содержит логики, реализует интерфейс (`IHealthView { void Render(int current, int max) }`), Presenter работает с интерфейсом, не с конкретным виджетом.
 - View и Model **не знают друг о друге**; всё через Presenter.
 
 ```csharp
 public interface IHealthView { void Render(int current, int max); }
 
-public class HealthPresenter
+public class HealthPresenter : IDisposable
 {
     private readonly IHealthView _view;
     private readonly Health _model;
@@ -34,8 +34,12 @@ public class HealthPresenter
     {
         _view = view;
         _model = model;
-        _model.Changed += () => _view.Render(_model.Current, _model.Max);
+        _model.Changed += OnChanged;
     }
+
+    private void OnChanged() => _view.Render(_model.Current, _model.Max);
+
+    public void Dispose() => _model.Changed -= OnChanged;   // без отписки модель удерживает presenter и view
 }
 ```
 

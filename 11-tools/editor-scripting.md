@@ -50,7 +50,7 @@ serializedObject.ApplyModifiedProperties();
 
 ## Odin Inspector (если подключён)
 
-При наличии Odin предпочитают его атрибуты (`[ShowInInspector]`, `[Button]`, `[ValueDropdown]`, `OdinEditorWindow`) вместо ручного `OnInspectorGUI` — меньше boilerplate. Проверять наличие в проекте.
+При наличии Odin предпочитают его атрибуты (`[ShowInInspector]`, `[Button]`, `[ValueDropdown]`, `OdinEditorWindow`) вместо ручного `OnInspectorGUI` — меньше boilerplate.
 
 ## UI Toolkit для редактора
 

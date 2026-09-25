@@ -37,7 +37,7 @@ Presentation ← MonoBehaviour, UI, ScriptableObject-конфиги. Реали�
 
 ## Как закрепляется физически
 
-- Слои — отдельные [сборки (asmdef)](../03-unity-core/assembly-definitions.md). Domain-сборка **не ссылается** на `UnityEngine` — компилятор не даст нарушить границу.
+- Слои — отдельные [сборки (asmdef)](../03-unity-core/assembly-definitions.md). По умолчанию asmdef ссылается на сборки движка; в asmdef слоя Domain включают **No Engine References** (`"noEngineReferences": true`) — тогда `using UnityEngine` в Domain не скомпилируется. Направление зависимостей задаётся списком `references`: Domain не ссылается на Application и Presentation, Application — на Presentation.
 - Связывание реализаций с интерфейсами — в DI-инсталлере (Zenject/VContainer), а не в конструкторах несвязанных классов.
 
 ## Зачем (на собеседовании)
@@ -54,7 +54,7 @@ Presentation ← MonoBehaviour, UI, ScriptableObject-конфиги. Реали�
 - Какие слои и куда направлены зависимости (только внутрь).
 - Почему Domain не должен знать про `UnityEngine` (тестируемость, независимость).
 - Как достигается инверсия зависимостей (интерфейсы в Application, реализации в Presentation, связывание в DI).
-- Как граница закрепляется технически (asmdef без ссылки на UnityEngine).
+- Как граница закрепляется технически (asmdef с `noEngineReferences`, направление `references`).
 - Когда слои — оверинжиниринг.
 
 ---

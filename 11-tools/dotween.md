@@ -2,7 +2,7 @@
 
 # DOTween
 
-DOTween — твин-движок для анимации значений во времени (позиция, цвет, alpha, числа, текст) без ручных корутин-лерпов. Дефолтный инструмент анимации в проектах этого пользователя.
+DOTween — твин-движок для анимации значений во времени (позиция, цвет, alpha, числа, текст) без ручных корутин-лерпов.
 
 ## Зачем вместо корутины
 
@@ -16,7 +16,7 @@ _tmpText.DOText("Готово!", 0.5f);   // печать текста
 
 ## Основное
 
-- **Shortcut-твины**: `DOMove`, `DOLocalMove`, `DOScale`, `DORotate`, `DOFade`, `DOColor`, `DOText` (TMP), `DOValue` для произвольного значения.
+- **Shortcut-твины**: `DOMove`, `DOLocalMove`, `DOScale`, `DORotate`, `DOFade`, `DOColor`, `DOText` (TMP), `DOTween.To(getter, setter, endValue, duration)` для произвольного значения (`DOValue` — шорткат `Slider`).
 - **Easing**: `SetEase(Ease.X)` или AnimationCurve.
 - **Sequence** — композиция:
 
@@ -49,13 +49,13 @@ DOTween.Sequence()
 await transform.DOMove(target, 1f).ToUniTask(cancellationToken: ct);
 ```
 
-`ToUniTask` — ожидание твина через [UniTask](../05-async/async.md); не использовать `WaitForCompletion()` (блокирует поток).
+`ToUniTask` — ожидание твина через [UniTask](../05-async/async.md) с поддержкой отмены (интеграция включается define-символом `UNITASK_DOTWEEN_SUPPORT`). `WaitForCompletion()` поток не блокирует: это YieldInstruction для корутин (`yield return tween.WaitForCompletion()`). Для `async/await` без UniTask есть `AsyncWaitForCompletion()`, возвращающий `Task`.
 
 ## Что спрашивают на собеседовании
 
 - Зачем DOTween вместо корутин-лерпов.
 - Главный риск (твин переживает объект → `MissingReferenceException`) и как чинить (`SetLink`/`Kill`).
 - `Append` vs `Join` в Sequence.
-- Как ждать твин в async (`ToUniTask`) и почему не `WaitForCompletion`.
+- Как ждать твин: в async — `ToUniTask` или `AsyncWaitForCompletion`, в корутине — `WaitForCompletion`.
 
 ---

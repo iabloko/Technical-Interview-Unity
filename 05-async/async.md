@@ -49,12 +49,12 @@ IEnumerator Blink()
 StartCoroutine(Blink());
 ```
 
-- **Плюсы:** просты, встроены, привязаны к жизни объекта (объект выключили — корутина встала).
+- **Плюсы:** просты, встроены, привязаны к жизни объекта: `SetActive(false)` на GameObject и `Destroy` останавливают все его корутины (при повторной активации они не продолжаются); `enabled = false` у компонента корутины **не** останавливает.
 - **Минусы:**
   - **нет возвращаемого значения** (только `yield`), композиция громоздкая;
-  - **исключения не пробрасываются** наружу — теряются молча;
-  - **аллокации** — `new WaitForSeconds(...)` и сам энумератор мусорят в [GC](../03-unity-core/unity-gc.md);
-  - жёстко завязаны на живой включённый MonoBehaviour (нельзя из обычного C#-класса);
+  - **исключения не пробрасываются** вызывающему коду: Unity логирует исключение и завершает корутину, запустивший её код об ошибке не узнаёт;
+  - **аллокации** — `new WaitForSeconds(...)` и сам энумератор аллоцируются в куче (нагрузка на [GC](../03-unity-core/unity-gc.md));
+  - запускаются только через MonoBehaviour на активном GameObject (`StartCoroutine`), из обычного C#-класса не запустить;
   - нельзя `await`, неудобно отменять выборочно.
 
 ### Task — стандартный .NET TPL
@@ -62,10 +62,11 @@ StartCoroutine(Blink());
 `System.Threading.Tasks.Task` — родной асинхронный примитив .NET. Создан в первую очередь для **IO** и **работы в пуле потоков**, не под игровой цикл Unity.
 
 ```csharp
+private static readonly HttpClient Client = new HttpClient(); // один экземпляр на приложение: клиент на каждый запрос удерживает сокеты
+
 async Task<string> DownloadAsync(string url)
 {
-    using var client = new HttpClient();
-    return await client.GetStringAsync(url);   // IO-операция, не блокирует поток
+    return await Client.GetStringAsync(url);   // IO-операция, не блокирует поток
 }
 ```
 
@@ -85,13 +86,14 @@ async UniTask LoadLevelAsync(CancellationToken ct)
 {
     await UniTask.Delay(200, cancellationToken: ct);      // пауза без аллокаций
     await UniTask.Yield(PlayerLoopTiming.Update);          // подождать кадр
-    var go = await Addressables.LoadAssetAsync<GameObject>("Boss").ToUniTask(cancellationToken: ct);
+    var handle = Addressables.LoadAssetAsync<GameObject>("Boss");
+    var prefab = await handle.ToUniTask(cancellationToken: ct);  // handle освобождают Addressables.Release(handle), когда ассет не нужен
     await UniTask.WaitUntil(() => _ready, cancellationToken: ct);
 }
 ```
 
 - **Плюсы:** zero-allocation; работает из любого C#-класса (не нужен MonoBehaviour); умеет ждать кадры/тайминги PlayerLoop; оборачивает `AsyncOperation`, `Addressables`, `UnityWebRequest`, `DOTween` (`.ToUniTask()`); хорошая отмена через `CancellationToken`, привязка к жизни объекта (`GetCancellationTokenOnDestroy()`); удобные `UniTask.WhenAll/WhenAny`.
-- **Минусы:** внешняя зависимость (не из коробки); как struct — UniTask можно `await` **только один раз** (повторный — через `.Preserve()` или `AsyncLazy`).
+- **Минусы:** внешняя зависимость (не из коробки); UniTask можно `await` **только один раз**: источник результата (`IUniTaskSource`) берётся из пула и после первого `GetResult` возвращается в пул (повторно — через `.Preserve()` или `AsyncLazy`).
 
 ---
 
@@ -108,7 +110,7 @@ async UniTask LoadLevelAsync(CancellationToken ct)
 | Совместимость | стандарт .NET, любые библиотеки | конверсии `ToUniTask()` / `AsTask()` |
 | GC-нагрузка | заметная (объект + бокс) | минимальная |
 
-> Коротко: `Task` — универсальный .NET-примитив, не знающий про Unity и мусорящий в GC. `UniTask` — спроектирован под игровой цикл Unity, не аллоцирует и понимает кадры. Внутри Unity-gameplay `UniTask` почти всегда предпочтительнее.
+> Коротко: `Task` — универсальный .NET-примитив, не знающий про Unity и аллоцирующий в куче. `UniTask` — спроектирован под игровой цикл Unity, не аллоцирует и понимает кадры. Внутри Unity-gameplay `UniTask` почти всегда предпочтительнее.
 
 ---
 
@@ -119,7 +121,7 @@ async UniTask LoadLevelAsync(CancellationToken ct)
 - Чисто Unity-визуальные тайминги, где не важны возврат значения и обработка ошибок.
 - Legacy-код, который уже на корутинах.
 
-> При наличии UniTask новые корутины писать смысла мало — UniTask их полностью покрывает и не мусорит.
+> При наличии UniTask новые корутины писать смысла мало — UniTask их полностью покрывает и на типичных путях не аллоцирует.
 
 ### Task
 - **IO-bound** работа и интеграция с **.NET-библиотеками**, которые возвращают `Task` (HTTP-клиенты, БД, gRPC).
@@ -130,7 +132,7 @@ async UniTask LoadLevelAsync(CancellationToken ct)
 > Важно: после `Task.Run` вы **в другом потоке** — перед обращением к Unity API вернитесь в главный (`await UniTask.SwitchToMainThread()` или через SynchronizationContext).
 
 ### UniTask
-- **Дефолт для async в Unity-gameplay/UI** (и дефолт этого проекта).
+- **Дефолт для async в Unity-gameplay/UI**.
 - Ожидание **кадров и таймингов** (`Yield`, `DelayFrame`, `WaitUntil`).
 - Ожидание **Unity-операций**: Addressables, `SceneManager.LoadSceneAsync`, `UnityWebRequest`, `DOTween` через `.ToUniTask()`.
 - **Горячие пути**, где важна нулевая аллокация и нагрузка на GC.
@@ -151,9 +153,9 @@ async UniTask ProcessAsync(CancellationToken ct)
 
 ## Senior-нюансы и подводные камни
 
-- **`async void` — почти всегда ошибка.** Исключение в нём роняет приложение, его нельзя `await` и отменить. Допустим только в обработчиках событий. В UniTask-мире вместо него — `UniTaskVoid` + `.Forget()` для fire-and-forget.
-- **Корутины глотают исключения, async — пробрасывает.** Ошибка в корутине просто прекращает её молча; в `async`-методе исключение всплывает в `await`. Это весомый аргумент за async для логики, где важна обработка ошибок.
-- **Отмена обязательна, а не опциональна.** Прокидывайте `CancellationToken` во все async-методы и привязывайте к жизни объекта (`this.GetCancellationTokenOnDestroy()`), иначе UniTask продолжит выполняться после уничтожения объекта (в отличие от корутины, которая встаёт при выключении). Отмена бросает `OperationCanceledException` — это штатный поток, а не ошибка.
+- **`async void` — почти всегда ошибка.** Вызывающий код не может его `await`, отменить и перехватить его исключение: исключение публикуется в `SynchronizationContext` — в Unity (`UnitySynchronizationContext`) оно логируется, в .NET-процессе без контекста завершает процесс. Допустим только в обработчиках событий. В UniTask-мире вместо него — `UniTaskVoid` + `.Forget()` для fire-and-forget.
+- **Корутина не передаёт исключение вызывающему коду, async — передаёт.** Исключение в корутине логируется и завершает её, но запустивший код об ошибке не узнаёт; в `async`-методе исключение всплывает в `await` и перехватывается `try/catch`. Это весомый аргумент за async для логики, где важна обработка ошибок.
+- **Отмена обязательна, а не опциональна.** Прокидывайте `CancellationToken` во все async-методы и привязывайте к жизни объекта (`this.GetCancellationTokenOnDestroy()`), иначе UniTask продолжит выполняться после уничтожения объекта (в отличие от корутины, которая останавливается при деактивации GameObject). Отмена бросает `OperationCanceledException` — это штатный поток, а не ошибка.
 - **UniTask нельзя await дважды.** Это struct, «потребляется» одним await. Для разделяемого результата — `.Preserve()` или `AsyncLazy<T>`.
 - **`UniTask.Delay` по умолчанию масштабируется `Time.timeScale`.** На паузе (`timeScale = 0`) задержка не идёт. Нужен независимый таймер — `DelayType.UnscaledDeltaTime` или `Realtime`.
 - **`ConfigureAwait(false)` теряет главный поток.** В Unity это обычно не нужно и опасно: продолжение может оказаться не в главном потоке. Для UniTask вопрос неактуален — оно само про PlayerLoop.
@@ -166,12 +168,12 @@ async UniTask ProcessAsync(CancellationToken ct)
 
 1. **Асинхронность и многопоточность — это одно и то же?** (Нет: async — ожидание без блокировки, может быть однопоточным; многопоточность — параллельное исполнение.)
 2. **Во что компилятор разворачивает `async/await`?** (В конечный автомат с continuation на каждом `await`.)
-3. **Почему `Task` мусорит в GC, а `UniTask` — нет?** (`Task` — class в куче + бокс; `UniTask` — struct, исполняется на PlayerLoop.)
-4. **Почему корутины «не видят» исключений, а `async` — видит?** (Корутина прекращается молча; в async исключение всплывает на `await`.)
+3. **Почему `Task` создаёт нагрузку на GC, а `UniTask` — нет?** (`Task` — class в куче + бокс state machine; `UniTask` — struct, а state machine и источники результата переиспользуются из пула.)
+4. **Как ведут себя исключения в корутине и в `async`?** (Корутина логирует исключение и завершается, вызывающий код его не получает; в async исключение всплывает на `await`.)
 5. **Можно ли `await` один `UniTask` дважды? Что делать, если надо?** (Нельзя — struct потребляется; `.Preserve()` / `AsyncLazy`.)
 6. **Куда вернётся код после `await` в Unity и кто это решает?** (В главный поток через `UnitySynchronizationContext`; `ConfigureAwait(false)` это ломает.)
-7. **Чем опасен `async void`?** (Нельзя await/отменить, исключение роняет приложение; вместо — `UniTaskVoid.Forget()`.)
-8. **Корутина останавливается при выключении объекта. А UniTask?** (Нет — продолжится, пока не отменишь токеном; нужна привязка `GetCancellationTokenOnDestroy`.)
+7. **Чем опасен `async void`?** (Нельзя await, отменить и перехватить исключение: оно уходит в `SynchronizationContext` — в Unity логируется, без контекста завершает процесс; вместо — `UniTaskVoid` + `.Forget()`.)
+8. **Корутина останавливается при деактивации GameObject. А UniTask?** (Нет — продолжится, пока не отменишь токеном; нужна привязка `GetCancellationTokenOnDestroy`.)
 9. **Сделал тяжёлый расчёт в `Task.Run`, упал на обращении к `transform`. Почему?** (Код в пуле потоков; Unity API не потокобезопасен — вернуться в главный поток.)
 10. **Когда `Task` уместнее `UniTask`?** (IO/CPU в пуле потоков, .NET-библиотеки, код вне Unity, многократный await.)
 

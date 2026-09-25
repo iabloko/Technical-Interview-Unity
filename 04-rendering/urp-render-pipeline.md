@@ -39,5 +39,13 @@
 | Настройка/расширение | ограничено | **Shader Graph + Renderer Features** | максимум возможностей      |
 
 > Когда выбирать URP: мобильные/VR-проекты, кроссплатформенные игры, когда нужен баланс графики и FPS. HDRP — только для фотореалистичных проектов на мощном железе.
-> 
+
+## Что спрашивают на собеседовании
+
+- Чем URP отличается от Built-in и HDRP и когда какой выбирать.
+- Что такое single-pass forward и чем он отличается от forward в Built-in.
+- Что даёт Forward+.
+- Что делает SRP Batcher, почему он не уменьшает число draw call'ов и что выводит объект из SRP Batcher (`UnityPerMaterial`, `MaterialPropertyBlock`).
+- Какими средствами расширяют URP (Renderer Features, Shader Graph, Volume).
+
 ---

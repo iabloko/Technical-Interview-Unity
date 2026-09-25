@@ -59,8 +59,8 @@ current = Mathf.Lerp(current, target, t);
 
 ## Ограничение FPS: vSyncCount и targetFrameRate
 
-- `QualitySettings.vSyncCount` — синхронизация с разверткой дисплея (1 = каждый VBlank). Если `vSyncCount > 0`, `targetFrameRate` **игнорируется**.
-- `Application.targetFrameRate` — программный потолок FPS (работает при `vSyncCount = 0`). На мобильных — стандартный способ ограничить FPS ради энергопотребления/нагрева (см. [мобильная оптимизация](../06-performance/mobile-optimization.md)); по умолчанию мобильные платформы рендерят на 30.
+- `QualitySettings.vSyncCount` — синхронизация с разверткой дисплея (1 = каждый VBlank). На десктопных платформах при `vSyncCount > 0` `targetFrameRate` **игнорируется**. На iOS и Android наоборот: `vSyncCount` игнорируется, частоту кадров задаёт `targetFrameRate`.
+- `Application.targetFrameRate` — программный потолок FPS (на десктопе работает при `vSyncCount = 0`). На мобильных — стандартный способ ограничить FPS ради энергопотребления/нагрева (см. [мобильная оптимизация](../06-performance/mobile-optimization.md)); по умолчанию мобильные платформы рендерят на 30.
 
 ## Senior-нюансы
 
@@ -78,6 +78,6 @@ current = Mathf.Lerp(current, target, t);
 - Что произойдёт при `timeScale = 0` с `Update` и `FixedUpdate`; как сделать UI, работающий на паузе.
 - Почему движение без умножения на `deltaTime` зависит от FPS; чем плох `Lerp(a, b, k * deltaTime)` и как сделать кадронезависимое затухание.
 - Зачем `Rigidbody.Interpolate`, если физика и так детерминирована (рендер между шагами симуляции).
-- `vSyncCount` vs `targetFrameRate` — что приоритетнее и когда какой использовать.
+- `vSyncCount` vs `targetFrameRate` — что приоритетнее и когда какой использовать (на мобильных действует только `targetFrameRate`).
 
 ---

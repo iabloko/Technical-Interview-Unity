@@ -6,7 +6,7 @@
 
 ## Синтаксис
 
-При включённом контексте (`#nullable enable` или `<Nullable>enable</Nullable>` в проекте):
+При включённом контексте: `#nullable enable` в файле или `<Nullable>enable</Nullable>` в `.csproj` обычного .NET-проекта. В Unity `.csproj` генерируется редактором и правки в нём не сохраняются, поэтому для всей сборки добавляют `-nullable:enable` в файл `csc.rsp` рядом с `.asmdef`.
 
 ```csharp
 string  name;     // non-nullable: присвоение null → предупреждение
