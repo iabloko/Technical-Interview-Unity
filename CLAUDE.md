@@ -8,7 +8,8 @@ The notes are published as a site with MkDocs Material (`mkdocs.yml`), deployed 
 
 - Navigation is generated from `docs/README.md` by `hooks/readme_nav.py`: `### <section>` is a section, `- [<title>](<path>.md)` is a page. Order and titles are edited only in `docs/README.md`.
 - The build runs in strict mode and fails on: a file not listed in `docs/README.md`, a broken link or anchor, a Markdown construct from the list below.
-- Local preview: `pip install -r requirements.txt`, then `mkdocs serve` (http://127.0.0.1:8000).
+- Podcast audio: `docs/<section>/audio/<note>.mp3` adds an `<audio>` player under the title of `docs/<section>/<note>.md` (`hooks/audio.py`); an mp3 without a matching note fails the build. Max 25 MiB per file (Workers static assets limit). mp3 requests go through `worker/index.js`, which adds Range support (`206`): static assets answer Range with `200`, and iOS Safari requires `206` for `<audio>`.
+- Local preview: `pip install -r requirements.txt`, then `mkdocs serve` (http://127.0.0.1:8000). `mkdocs serve` does not support Range, so audio seeking does not work there; to check audio as deployed: `mkdocs build`, then `npx wrangler dev` (http://127.0.0.1:8787).
 
 ## Markdown rules
 

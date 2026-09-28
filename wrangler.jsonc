@@ -1,8 +1,12 @@
 {
   "name": "technical-interview-unity",
   "compatibility_date": "2026-09-26",
+  // Скрипт выполняется только для mp3 (поддержка Range), остальное отдаётся статикой
+  "main": "worker/index.js",
   "assets": {
     "directory": "./site",
-    "not_found_handling": "404-page"
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/*.mp3"]
   }
 }

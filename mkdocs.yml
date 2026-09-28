@@ -37,3 +37,4 @@ validation:
 # Навигация строится из docs/README.md, см. hooks/readme_nav.py
 hooks:
   - hooks/readme_nav.py
+  - hooks/audio.py
