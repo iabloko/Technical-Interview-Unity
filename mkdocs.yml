@@ -1,0 +1,39 @@
+site_name: Technical-Interview-Unity
+site_url: https://technical-interview-unity.dxsunty.workers.dev/
+strict: true
+
+theme:
+  name: material
+  language: ru
+  palette:
+    scheme: slate
+  features:
+    - content.code.copy
+    - navigation.top
+    - search.highlight
+
+plugins:
+  - search:
+      lang: [ru, en]
+
+markdown_extensions:
+  - toc:
+      permalink: true
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+  - tables
+  - pymdownx.highlight
+  - pymdownx.superfences
+
+validation:
+  nav:
+    omitted_files: warn
+    not_found: warn
+  links:
+    not_found: warn
+    anchors: warn
+
+# Навигация строится из docs/README.md, см. hooks/readme_nav.py
+hooks:
+  - hooks/readme_nav.py

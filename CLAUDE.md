@@ -1,6 +1,22 @@
 # CLAUDE.md
 
-This repo is a knowledge base for preparing for a Unity / C# technical interview. Notes are written in Russian as `.md` files, grouped into sections (`01-csharp`, `02-architecture`, ...). Each file starts with a `[← К содержанию](../README.md)` link and ends with `---`. A new file is registered by adding a link in `README.md`.
+This repo is a knowledge base for preparing for a Unity / C# technical interview. Notes are written in Russian as `.md` files in `docs/`, grouped into sections (`docs/01-csharp`, `docs/02-architecture`, ...). Each file starts with a `[← К содержанию](../README.md)` link and ends with `---`. A new file is registered by adding a link in `docs/README.md`.
+
+## Site
+
+The notes are published as a site with MkDocs Material (`mkdocs.yml`), deployed to a Cloudflare Worker on push to `main` (`wrangler.jsonc` publishes only the built `site/`).
+
+- Navigation is generated from `docs/README.md` by `hooks/readme_nav.py`: `### <section>` is a section, `- [<title>](<path>.md)` is a page. Order and titles are edited only in `docs/README.md`.
+- The build runs in strict mode and fails on: a file not listed in `docs/README.md`, a broken link or anchor, a Markdown construct from the list below.
+- Local preview: `pip install -r requirements.txt`, then `mkdocs serve` (http://127.0.0.1:8000).
+
+## Markdown rules
+
+MkDocs uses Python-Markdown, which parses some constructs differently from GitHub:
+
+- Blank line before a list (a list directly after a text line is merged into the paragraph).
+- Nested content of a list item (sub-list, quote, code, continuation text) is indented by 4 spaces.
+- Blank line after a closing code fence, including inside a quote (`>` on its own line).
 
 ## Writing style
 
