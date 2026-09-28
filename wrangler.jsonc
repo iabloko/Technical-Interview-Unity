@@ -1,6 +1,8 @@
 {
   "name": "technical-interview-unity",
   "compatibility_date": "2026-09-26",
+  // Отдельные адреса версий (<version>-technical-interview-unity...) не используются
+  "preview_urls": false,
   // Скрипт выполняется только для mp3 (поддержка Range), остальное отдаётся статикой
   "main": "worker/index.js",
   "assets": {
