@@ -27,9 +27,9 @@ async Task LoadAsync()
 
 ---
 
-## Часть 2. Три инструмента в Unity
+## Часть 2. Инструменты в Unity
 
-В Unity исторически сосуществуют три механизма «отложенного» кода. Важно понимать сильные и слабые стороны каждого.
+В Unity исторически сосуществуют три механизма «отложенного» кода; начиная с Unity 2023.1 к ним добавился встроенный `Awaitable`. Важно понимать сильные и слабые стороны каждого.
 
 ### IEnumerator — корутины
 
@@ -94,6 +94,26 @@ async UniTask LoadLevelAsync(CancellationToken ct)
 
 - **Плюсы:** zero-allocation; работает из любого C#-класса (не нужен MonoBehaviour); умеет ждать кадры/тайминги PlayerLoop; оборачивает `AsyncOperation`, `Addressables`, `UnityWebRequest`, `DOTween` (`.ToUniTask()`); хорошая отмена через `CancellationToken`, привязка к жизни объекта (`GetCancellationTokenOnDestroy()`); удобные `UniTask.WhenAll/WhenAny`.
 - **Минусы:** внешняя зависимость (не из коробки); UniTask можно `await` **только один раз**: источник результата (`IUniTaskSource`) берётся из пула и после первого `GetResult` возвращается в пул (повторно — через `.Preserve()` или `AsyncLazy`).
+
+### Awaitable — встроенный тип Unity (2023.1+, Unity 6)
+
+`Awaitable` — тип Unity, который можно ожидать через `await` и использовать как возвращаемый тип `async`-метода; встроен в движок, внешняя зависимость не нужна.
+
+```csharp
+async Awaitable SpawnWaveAsync(CancellationToken ct)
+{
+    await Awaitable.WaitForSecondsAsync(1f, ct);   // пауза
+    await Awaitable.NextFrameAsync(ct);            // следующий кадр
+    await Awaitable.BackgroundThreadAsync();       // продолжение в потоке ThreadPool
+    var data = HeavyCompute();                     // главный поток свободен
+    await Awaitable.MainThreadAsync();             // обратно в главный поток — снова можно Unity API
+    Spawn(data);
+}
+```
+
+- Статические методы: `NextFrameAsync`, `WaitForSecondsAsync`, `FixedUpdateAsync`, `EndOfFrameAsync`, `MainThreadAsync`, `BackgroundThreadAsync`, `FromAsyncOperation` (обёртка над `AsyncOperation`).
+- Экземпляры **берутся из пула**, поэтому один `Awaitable` нельзя ожидать дважды: повторный `await` — неопределённое поведение (исключение или дедлок).
+- Продолжение `async Awaitable`-метода: если метод вызван из главного потока, он продолжается в главном потоке, иначе — в потоке ThreadPool. Продолжения обычных `Task` Unity направляет в главный поток через `UnitySynchronizationContext`.
 
 ---
 
@@ -176,5 +196,6 @@ async UniTask ProcessAsync(CancellationToken ct)
 8. **Корутина останавливается при деактивации GameObject. А UniTask?** (Нет — продолжится, пока не отменишь токеном; нужна привязка `GetCancellationTokenOnDestroy`.)
 9. **Сделал тяжёлый расчёт в `Task.Run`, упал на обращении к `transform`. Почему?** (Код в пуле потоков; Unity API не потокобезопасен — вернуться в главный поток.)
 10. **Когда `Task` уместнее `UniTask`?** (IO/CPU в пуле потоков, .NET-библиотеки, код вне Unity, многократный await.)
+11. **Что такое `Awaitable` и почему его нельзя ожидать дважды?** (Встроенный async-тип Unity 2023.1+; экземпляры переиспользуются из пула.)
 
 ---

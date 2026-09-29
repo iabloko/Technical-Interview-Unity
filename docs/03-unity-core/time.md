@@ -69,7 +69,7 @@ current = Mathf.Lerp(current, target, t);
 - **Хитчи и `deltaTime`**: однократный длинный кадр даёт большой `deltaTime` → телепортация объектов, движущихся кодом. `maximumDeltaTime` ограничивает это и для `deltaTime` обычного Update.
 - Таймеры геймплея — складывать `deltaTime`, а не сравнивать `Time.time` с float-порогом: точность `float` у `Time.time` деградирует на долгих сессиях (часы аптайма — мобильные/выживалки). Для длинных сессий — `Time.timeAsDouble` / `unscaledTimeAsDouble`.
 - `timeScale = 0` останавливает и `Time.time` — кулдауны на `Time.time` «замерзают» на паузе; решить через unscaled или осознанно оставить.
-- Реальная длительность для метрик/лога — `Time.realtimeSinceStartup` или `Stopwatch`, не `Time.time`.
+- Реальная длительность для метрик/лога — `Time.realtimeSinceStartupAsDouble` (документация рекомендует его вместо `realtimeSinceStartup` ради точности на долгих сессиях) или `Stopwatch`, не `Time.time`.
 
 ## Что спрашивают на собеседовании
 

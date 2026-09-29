@@ -12,7 +12,7 @@
 Все типы наследуют `Equals(object)` и `GetHashCode()` от `object`:
 
 - `class`: `Equals` по умолчанию сравнивает ссылки.
-- `struct`: `ValueType.Equals` сравнивает поля через **рефлексию** — медленно и с боксингом. `ValueType.GetHashCode` тоже рефлексивен.
+- `struct`: `ValueType.Equals(object)` вызывает `Object.Equals` для каждого поля и возвращает `true`, если все поля равны; аргумент приходит упакованным (boxing). `ValueType.GetHashCode` вычисляет хеш по одному или нескольким полям, и, по документации, результат «вряд ли подходит» как ключ хеш-таблицы. Документация рекомендует переопределять `Equals` ради производительности, особенно если в структуре есть поля ссылочных типов.
 
 ## Контракт
 
@@ -27,7 +27,7 @@
 
 ## IEquatable&lt;T&gt;
 
-Типизированный `Equals(T)` без боксинга и приведения. Критично для struct-ключей и элементов коллекций — `EqualityComparer<T>.Default` использует его, избегая рефлексии и боксинга.
+Типизированный `Equals(T)` без боксинга и приведения. Критично для struct-ключей и элементов коллекций — `EqualityComparer<T>.Default` использует его вместо `ValueType.Equals(object)` и не упаковывает значения.
 
 ```csharp
 public readonly struct GridPos : IEquatable<GridPos>
@@ -60,7 +60,7 @@ public readonly struct GridPos : IEquatable<GridPos>
 
 - Почему `Equals` и `GetHashCode` переопределяют вместе.
 - Чем `==` отличается от `Equals` (компиляция vs рантайм).
-- Зачем `IEquatable<T>` для struct (без боксинга/рефлексии).
+- Зачем `IEquatable<T>` для struct (без боксинга и без поэлементного `ValueType.Equals`).
 - Что такое fake null в Unity.
 
 ---

@@ -85,7 +85,7 @@ buffer.Release();   // ComputeBuffer — нативный ресурс, осво
 ## Senior-нюансы
 
 - Каждый дополнительный fullscreen-проход на мобильных — это bandwidth: лишний load/store render target на тайловом GPU дороже самой математики. Меньше блитов, объединять эффекты в один проход (см. [мобильная оптимизация](../06-performance/mobile-optimization.md)).
-- `RTHandle`/временные RT — через систему пайплайна (`RenderingUtils.ReAllocateIfNeeded` / RenderGraph), а не `new RenderTexture` каждый кадр.
+- `RTHandle`/временные RT — через систему пайплайна (`RenderingUtils.ReAllocateHandleIfNeeded` в URP 17 / Unity 6, в более ранних версиях — `ReAllocateIfNeeded`; либо RenderGraph), а не `new RenderTexture` каждый кадр.
 - Кастомный пасс виден во [Frame Debugger](../03-unity-core/frame-debugger.md) — первый инструмент проверки, что пасс встал в нужное место и с нужными целями.
 - `CommandBuffer` записывает команды, исполнение — позже на render thread/GPU: состояние (материалы, свойства) фиксировать через `MaterialPropertyBlock`/per-pass материалы, а не менять общий материал между записью и исполнением.
 

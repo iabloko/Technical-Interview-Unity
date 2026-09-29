@@ -13,7 +13,7 @@
 Это первый вопрос — он определяет, что вообще оптимизировать.
 
 - **CPU-bound**: основное время в скриптах/физике/анимации/подготовке рендера. Главный поток не успевает за кадр.
-- **GPU-bound**: CPU ждёт GPU (`Gfx.WaitForPresent`/`WaitForGPU` в Profiler). Узкое место — fill-rate, шейдеры, [overdraw](mobile-optimization.md), число [SetPass](batching.md).
+- **GPU-bound**: CPU ждёт GPU. В Profiler это маркеры `Gfx.WaitForPresentOnGfxThread` (главный поток готов, render thread ещё не закончил), `Gfx.PresentFrame` (ожидание, пока GPU отрисует и выведет кадр) и `WaitForTargetFPS`, вложенный в `Gfx.WaitForPresentOnGfxThread`. Узкое место — fill-rate, шейдеры, [overdraw](mobile-optimization.md), число [SetPass](batching.md).
 
 Сигнал GPU-bound: снижение разрешения резко поднимает FPS. Сигнал CPU-bound: снижение разрешения почти не влияет, а упрощение логики/числа объектов — влияет.
 
@@ -40,7 +40,7 @@
 ## Что спрашивают на собеседовании
 
 - С чего начинать оптимизацию (измерить, определить CPU/GPU-bound).
-- Как понять, CPU- или GPU-bound (тест снижением разрешения, `Gfx.WaitForPresent`).
+- Как понять, CPU- или GPU-bound (тест снижением разрешения, `Gfx.WaitForPresentOnGfxThread`).
 - Почему нельзя профилировать в редакторе и оптимизировать наугад.
 - Как найти источник GC-спайков и утечки памяти.
 

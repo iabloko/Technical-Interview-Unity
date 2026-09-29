@@ -2,7 +2,7 @@
 
 # Современный C#: record, pattern matching, switch expressions
 
-> Unity 2021.2 и новее (включая Unity 6) официально поддерживает C# 9; возможности C# 10+ (`record struct`, `global using` и др.) официально не поддерживаются. Для `record` и `init`-сеттеров нужен тип `System.Runtime.CompilerServices.IsExternalInit`, которого нет в BCL Unity: его объявляют в проекте вручную. Сериализатор Unity `record` не поддерживает. Точный список — в разделе Manual «C# compiler» для своей версии редактора.
+> Unity 2021.2 и новее (включая Unity 6) официально поддерживает C# 9; возможности C# 10+ (`record struct`, `global using` и др.) официально не поддерживаются. Часть возможностей C# 9 в списке неподдерживаемых, в том числе **init-only setters**, covariant return types и module initializers. Для полной поддержки `record` нужен тип `System.Runtime.CompilerServices.IsExternalInit`, который есть только в .NET 5+; в BCL Unity его нет. На практике его объявляют в проекте вручную — это обходной путь, документацией Unity не описанный. `record` не используют в сериализуемых типах: сериализатор Unity их не поддерживает. Точный список — в разделе Manual «C# compiler» для своей версии редактора.
 
 ## record
 
