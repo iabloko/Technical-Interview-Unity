@@ -45,35 +45,49 @@ private void SetHealth(int v)
 Лямбда, захватывающая внешнюю переменную, образует замыкание. Компилятор генерирует **скрытый класс** (display class), переносит захваченные переменные в его поля, а лямбду — в его метод. Аллокаций две: экземпляр display class создаётся при входе в область видимости захваченной переменной (даже если лямбда в этом проходе не создаётся), экземпляр делегата — при каждом вычислении лямбда-выражения.
 
 ```csharp
-void Apply(bool enabled)
+public class ShopView : MonoBehaviour
 {
-    int bonus = 10;
-    if (!enabled) return;
+    private void BindBuyButton(Button button, ShopItem item)
+    {
+        if (!item.IsAvailable)
+        {
+            button.interactable = false;
+            return;
+        }
 
-    Func<int, int> f = x => x + bonus;
-    _total += f(5);
+        button.onClick.AddListener(() => Buy(item));
+    }
+
+    private void Buy(ShopItem item) { /* ... */ }
 }
 ```
 
-Код после компиляции (упрощённо; настоящие имена — `<>c__DisplayClass0_0`, `<Apply>b__0`):
+Код после компиляции (упрощённо; `DisplayClass` вложен в `ShopView`, настоящие имена — `<>c__DisplayClass0_0`, `<>4__this`, `<BindBuyButton>b__0`):
 
 ```csharp
 sealed class DisplayClass
 {
-    public int bonus;                          // захваченная переменная стала полем
-    public int Lambda(int x) => x + bonus;     // тело лямбды стало методом
+    public ShopView owner;                     // захвачен this: лямбда вызывает метод экземпляра Buy
+    public ShopItem item;                      // захваченный параметр стал полем
+    public void Lambda() => owner.Buy(item);   // тело лямбды стало методом
 }
 
-void Apply(bool enabled)
+private void BindBuyButton(Button button, ShopItem item)
 {
-    var closure = new DisplayClass();          // аллокация 1: вход в область видимости bonus
-    closure.bonus = 10;                        // все обращения к bonus идут через поле
-    if (!enabled) return;                      // ранний выход: аллокация 1 уже произошла
+    var closure = new DisplayClass();          // аллокация 1: вход в область видимости item — начало метода
+    closure.owner = this;
+    closure.item = item;                       // все обращения к item идут через поле
+    if (!closure.item.IsAvailable)
+    {
+        button.interactable = false;
+        return;                                // ранний выход: аллокация 1 уже произошла
+    }
 
-    Func<int, int> f = new Func<int, int>(closure.Lambda);  // аллокация 2: экземпляр делегата
-    _total += f(5);
+    button.onClick.AddListener(new UnityAction(closure.Lambda));  // аллокация 2: экземпляр делегата
 }
 ```
+
+`AddListener` дополнительно аллоцирует внутри `UnityEvent` обёртку `InvokableCall` — к замыканию она не относится.
 
 | Лямбда | Display class | Делегат |
 |---|---|---|
